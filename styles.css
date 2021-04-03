@@ -111,9 +111,9 @@ h2 {
   visibility: visible;
 }
 
-.form-control.success small {
+/* .form-control.success small {
   visibility: visible;
-}
+} */
 
 .form button {
   cursor: pointer;
