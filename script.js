@@ -27,31 +27,49 @@ function isValidEmail(email) {
   return re.test(email);
 }
 
+function checkRequired(inputArray) {
+  // high order array method
+  inputArray.forEach(function (inputItem) {
+    if (inputItem.value.trim() === '') {
+      showError(inputItem, `${getFieldName(inputItem)} is required`);
+    } else {
+      showSuccess(inputItem);
+    }
+  });
+}
+
+// get fieldname
+function getFieldName(input) {
+  return input.id.charAt(0).toUpperCase() + input.id.slice(1).toLowerCase();
+}
+
 // Event Listeners
 form.addEventListener('submit', function (e) {
   // prevent the form from submitting so we can check validation as no backend to submit to
   e.preventDefault();
 
-  if (username.value === '') {
-    showError(username, 'Username is required');
-  } else {
-    showSuccess(username);
-  }
-  if (email.value === '') {
-    showError(email, 'Email is required');
-  } else if (!isValidEmail(email.value)) {
-    showError(email, 'Email is not valid');
-  } else {
-    showSuccess(email);
-  }
-  if (password.value === '') {
-    showError(password, 'Password is required');
-  } else {
-    showSuccess(password);
-  }
-  if (password2.value === '') {
-    showError(password2, 'Password is required');
-  } else {
-    showSuccess(password2);
-  }
+  checkRequired([username, email, password, password2]);
+
+  //   if (username.value === '') {
+  //     showError(username, 'Username is required');
+  //   } else {
+  //     showSuccess(username);
+  //   }
+  //   if (email.value === '') {
+  //     showError(email, 'Email is required');
+  //   } else if (!isValidEmail(email.value)) {
+  //     showError(email, 'Email is not valid');
+  //   } else {
+  //     showSuccess(email);
+  //   }
+  //   if (password.value === '') {
+  //     showError(password, 'Password is required');
+  //   } else {
+  //     showSuccess(password);
+  //   }
+  //   if (password2.value === '') {
+  //     showError(password2, 'Password is required');
+  //   } else {
+  //     showSuccess(password2);
+  //   }
 });
