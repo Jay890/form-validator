@@ -3,6 +3,7 @@ const username = document.getElementById('username');
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const password2 = document.getElementById('password2');
+const inputValidationArray = [username, email, password, password2];
 
 // show input error functions
 
@@ -22,9 +23,14 @@ function showSuccess(input) {
   formControl.className = 'form-control success';
 }
 
-function isValidEmail(email) {
+function checkEmail(input) {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
+  // return re.test(email);
+  if (re.test(input.value.trim())) {
+    showSuccess(input);
+  } else {
+    showError(input, 'Email is not valid');
+  }
 }
 
 function checkRequired(inputArray) {
@@ -38,9 +44,28 @@ function checkRequired(inputArray) {
   });
 }
 
+function checkPasswordsMatch(input, input2) {
+  if (input.value !== input2.value)
+    return showError(input, `Passwords do not match.`);
+}
+
 // get fieldname
 function getFieldName(input) {
   return input.id.charAt(0).toUpperCase() + input.id.slice(1).toLowerCase();
+}
+
+// check field length
+function checkLength(input, minLength, maxlength) {
+  if (input.value.length < minLength || input.value.length > maxlength) {
+    showError(
+      input,
+      ` ${getFieldName(
+        input
+      )} must be at least ${minLength} and less than ${maxlength} `
+    );
+  } else {
+    showSuccess(input);
+  }
 }
 
 // Event Listeners
@@ -48,28 +73,11 @@ form.addEventListener('submit', function (e) {
   // prevent the form from submitting so we can check validation as no backend to submit to
   e.preventDefault();
 
-  checkRequired([username, email, password, password2]);
-
-  //   if (username.value === '') {
-  //     showError(username, 'Username is required');
-  //   } else {
-  //     showSuccess(username);
-  //   }
-  //   if (email.value === '') {
-  //     showError(email, 'Email is required');
-  //   } else if (!isValidEmail(email.value)) {
-  //     showError(email, 'Email is not valid');
-  //   } else {
-  //     showSuccess(email);
-  //   }
-  //   if (password.value === '') {
-  //     showError(password, 'Password is required');
-  //   } else {
-  //     showSuccess(password);
-  //   }
-  //   if (password2.value === '') {
-  //     showError(password2, 'Password is required');
-  //   } else {
-  //     showSuccess(password2);
-  //   }
+  // checkRequired([username, email, password, password2]);
+  checkRequired(inputValidationArray);
+  checkLength(username, 3, 10);
+  checkEmail(email);
+  checkLength(password, 6, 20);
+  checkLength(password2, 6, 20);
+  checkPasswordsMatch(password, password2);
 });
